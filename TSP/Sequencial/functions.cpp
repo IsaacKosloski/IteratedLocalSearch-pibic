@@ -238,6 +238,7 @@ void printResult(Node* bestSolution, char* fileName, double elapsedTime, double 
     }
     outputFile.close();
 }
+
 /**********************************************************************************************************************/
 /*(vi) Debug methods*/
 void printTableOfDouble(double *matrix, int dimensionOfNodes) {

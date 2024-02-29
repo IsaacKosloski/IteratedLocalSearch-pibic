@@ -1,0 +1,3 @@
+/mnt/c/Users/zaack/CLionProjects/IteratedLocalSearch-pibic/TSP/Sequencial/CMakeFiles/TspSeq.dir
+/mnt/c/Users/zaack/CLionProjects/IteratedLocalSearch-pibic/TSP/Sequencial/CMakeFiles/edit_cache.dir
+/mnt/c/Users/zaack/CLionProjects/IteratedLocalSearch-pibic/TSP/Sequencial/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/TspSeq.dir/comments.cpp.o CMakeFiles/TspSeq.dir/functions.cpp.o CMakeFiles/TspSeq.dir/main.cpp.o CMakeFiles/TspSeq.dir/node.cpp.o CMakeFiles/TspSeq.dir/scanner.cpp.o -o TspSeq 

@@ -57,12 +57,14 @@ int main(int argc,char **argv)
         {
             /*Fifth subsection: Change de route, by apply a perturbation*/
             doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+
             twoOpt(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes, omp_get_thread_num());
             /*Sixth subsection: Check if the new route is better than the previous one*/
-            if (solutionCost(perturbedSolution, tsp->nodesDistance, tsp->dimensionOfNodes) <
-                solutionCost(threadsSolution, tsp->nodesDistance, tsp->dimensionOfNodes, omp_get_thread_num()))
-                /*If the new route is better than the previous one, update the best route*/
-                copyArrayToMatrix(threadsSolution, perturbedSolution, omp_get_thread_num(), tsp->dimensionOfNodes);
+            better(tsp, perturbedSolution, threadsSolution, omp_get_thread_num());
         }
         #pragma omp single
             findBestSolution(threadsSolution, tsp->nodesDistance, bestSolution, tsp->dimensionOfNodes, omp_get_num_threads());

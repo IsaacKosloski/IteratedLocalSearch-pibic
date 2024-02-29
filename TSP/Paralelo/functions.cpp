@@ -1,6 +1,7 @@
 #include "functions.h"
 
 /* Fourth section: Functions and methods implementation */
+/*(i) Initial solution methods*/
 void greedyTSP(Scanner* &tsp, Node* &initialSolution)
 {
     //Start with the first node
@@ -31,6 +32,8 @@ void greedyTSP(Scanner* &tsp, Node* &initialSolution)
     }
 }
 
+/**********************************************************************************************************************/
+/*(ii) Perturbation methods*/
 void doubleBridgeMove(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes, int threadID)
 {
     copyMatrixToArray(perturbedSolution, initialSolution, threadID, dimensionOfNodes);
@@ -44,24 +47,8 @@ void doubleBridgeMove(Node* &initialSolution, Node* &perturbedSolution, int dime
         swap(perturbedSolution[i], perturbedSolution[j]);/**/
 }
 
-double solutionCost(Node* &solution, Node* &nodesDistance, int dimensionOfNodes)
-{
-    double cost = 0;
-    for (int i = 0; i < dimensionOfNodes - 1; i++)
-        cost += nodesDistance[(solution[i].ID * dimensionOfNodes) + solution[i + 1].ID].distanceValue;
-    cost += nodesDistance[(solution[dimensionOfNodes - 1].ID * dimensionOfNodes) + solution[0].ID].distanceValue;
-    return cost;
-}
-
-double solutionCost(Node* &solution, Node* &nodesDistance, int dimensionOfNodes, int threadID)
-{
-    double cost = 0;
-    for (int i = 0; i < dimensionOfNodes - 1; i++)
-        cost += nodesDistance[(solution[(dimensionOfNodes * threadID) + i].ID * dimensionOfNodes) + solution[(dimensionOfNodes * threadID) + i + 1].ID].distanceValue;
-    cost += nodesDistance[(solution[(dimensionOfNodes * threadID) + dimensionOfNodes - 1].ID * dimensionOfNodes) + solution[(dimensionOfNodes * threadID) + 0].ID].distanceValue;
-    return cost;
-}
-
+/**********************************************************************************************************************/
+/*(iii) Local search methods*/
 void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes)
 {
     Node* newSolution = new Node[dimensionOfNodes];
@@ -121,25 +108,36 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
 }
 
 /**********************************************************************************************************************/
-void printResult(Node* bestSolution, char* fileName, double elapsedTime, double cost, int dimensionOfNodes, int iterations)
+/*(iv) Acceptance criterion methods*/
+void better(Scanner* tsp, Node* &perturbedSolution, Node* &threadsSolution, int threadID)
 {
-    //Writing the last result in the file
-    ofstream outputFile(fileName);
-    if (outputFile.is_open())
-    {
-        outputFile << "Threads: " << 16 << endl;
-        outputFile << "Iterations: " << iterations;
-        outputFile << " Time: " << fixed << setprecision(4) << elapsedTime << " sec - " << elapsedTime/60 << " min - " << elapsedTime/3600 << " horas" << endl;
-        outputFile << floor(elapsedTime/3600) << " h " << ((elapsedTime/3600) - floor(elapsedTime/3600)) * 60 << " min" << endl ;
-        outputFile << "Problem dimension: " << dimensionOfNodes << endl;
-        outputFile << "\nTotal distance: " << cost << endl;
-
-        for (int i = 0; i < dimensionOfNodes; i++)
-            outputFile << "[" << bestSolution[i].ID << "] ";
-    }
+    /*Check if the new route is better than the previous one*/
+    if (solutionCost(perturbedSolution, tsp->nodesDistance, tsp->dimensionOfNodes) <
+        solutionCost(threadsSolution, tsp->nodesDistance, tsp->dimensionOfNodes, threadID))
+        /*If the new route is better than the previous one, update the best route*/
+        copyArrayToMatrix(threadsSolution, perturbedSolution, threadID, tsp->dimensionOfNodes);
 }
 
-//Change for a lambda expression
+/**********************************************************************************************************************/
+/*(v) Auxiliary methods*/
+double solutionCost(Node* &solution, Node* &nodesDistance, int dimensionOfNodes)
+{
+    double cost = 0;
+    for (int i = 0; i < dimensionOfNodes - 1; i++)
+        cost += nodesDistance[(solution[i].ID * dimensionOfNodes) + solution[i + 1].ID].distanceValue;
+    cost += nodesDistance[(solution[dimensionOfNodes - 1].ID * dimensionOfNodes) + solution[0].ID].distanceValue;
+    return cost;
+}
+
+double solutionCost(Node* &solution, Node* &nodesDistance, int dimensionOfNodes, int threadID)
+{
+    double cost = 0;
+    for (int i = 0; i < dimensionOfNodes - 1; i++)
+        cost += nodesDistance[(solution[(dimensionOfNodes * threadID) + i].ID * dimensionOfNodes) + solution[(dimensionOfNodes * threadID) + i + 1].ID].distanceValue;
+    cost += nodesDistance[(solution[(dimensionOfNodes * threadID) + dimensionOfNodes - 1].ID * dimensionOfNodes) + solution[(dimensionOfNodes * threadID) + 0].ID].distanceValue;
+    return cost;
+}
+
 void copyMatrixToArray(Node* &destination, Node* &source, int origin, int size)
 {
     for (int i = 0; i < size; i++)
@@ -149,7 +147,7 @@ void copyMatrixToArray(Node* &destination, Node* &source, int origin, int size)
 void copyArrayToMatrix(Node* &destination, Node* &source, int origin, int size)
 {
     for (int i = 0; i < size; i++)
-         destination[(size * origin) + i] = source[i];
+        destination[(size * origin) + i] = source[i];
 }
 
 void findBestSolution(Node* &solutions, Node* &nodesDistance, Node* &bestSolution, int dimensionOfNodes, int numberOfSolutions)
@@ -165,10 +163,26 @@ void findBestSolution(Node* &solutions, Node* &nodesDistance, Node* &bestSolutio
     copyMatrixToArray(bestSolution, solutions, threadID, dimensionOfNodes);
 }
 
+void printResult(Node* bestSolution, char* fileName, double elapsedTime, double cost, int dimensionOfNodes, int iterations)
+{
+    //Writing the last result in the file
+    ofstream outputFile(fileName);
+    if (outputFile.is_open())
+    {
+        outputFile << "Iterations: " << iterations;
+        outputFile << " Time: " << fixed << setprecision(4) << elapsedTime << " sec - " << elapsedTime/60 << " min - " << elapsedTime/3600 << " horas" << endl;
+        outputFile << floor(elapsedTime/3600) << " h " << ((elapsedTime/3600) - floor(elapsedTime/3600)) * 60 << " min" << endl ;
+        outputFile << "Problem dimension: " << dimensionOfNodes << endl;
+        outputFile << "\nTotal distance: " << cost << endl;
+
+        for (int i = 0; i < dimensionOfNodes; i++)
+            outputFile << "[" << bestSolution[i].ID << "] ";
+    }
+    outputFile.close();
+}
+
 /**********************************************************************************************************************/
-
-
-//auxiliary function and methods
+/*(vi) Debug methods*/
 void printTableOfDouble(double *matrix, int dimensionOfNodes) {
     for (int in = 0; in < dimensionOfNodes; in++)
     {
