@@ -1,7 +1,7 @@
 //Iterated Local Search
 //Initial Solution: generate by a greedy algorithm;
-//g++ node.cpp scanner.cpp functions.cpp main.cpp -o TSP -Wall -pedantic
-//./TspSeq ../Benchmarks/a280.tsp/a280.tsp ../Results/Sequencial/a280.res
+//g++ node.cpp scanner.cpp functions.cpp main.cpp -o TspSeq -Wall -pedantic
+//./TspSeq ../Benchmarks/a280.tsp/a280.tsp ../Solutions/Sequencial/a280.sol
 
 #include "scanner.h"
 #include "functions.h"
@@ -37,12 +37,13 @@ int main(int argc,char **argv)
     {
         /*Fifth subsection: Change de route, by apply a perturbation*/
         doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
+        /*doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
         doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
         doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
-        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
-        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
+        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);*/
 
-        linKernighan(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
+        //linKernighan(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
+        twoOpt(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
         /*Sixth subsection: Check if the new route is better than the previous one*/
         better(tsp, perturbedSolution, bestSolution, tsp->dimensionOfNodes);
         iteration++;
@@ -70,6 +71,8 @@ int main(int argc,char **argv)
     delete[] bestSolution;
     delete[] perturbedSolution;
     delete[] initialSolution;
+    delete[] tsp->nodes;
+    delete[] tsp->nodesDistance;
     delete tsp;
 
     return 0;

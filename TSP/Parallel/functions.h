@@ -11,11 +11,12 @@ void greedyTSP(Scanner* &tsp, Node* &initialSolution);
 /**********************************************************************************************************************/
 /*(ii) Perturbation methods*/
 void doubleBridgeMove(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes, int threadID);
+void doubleBridgeMove2(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes, int threadID);
 /**********************************************************************************************************************/
 /*(iii) Local search methods*/
 void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes);
 void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes, int threadID);
-//void linKernighan(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes);
+void linKernighan(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes);
 /**********************************************************************************************************************/
 /*(iv) Acceptance criterion methods*/
 void better(Scanner* tsp, Node* &perturbedSolution, Node* &threadsSolution, int threadID);
@@ -31,6 +32,7 @@ void printResult(Node* bestSolution, char* fileName, double elapsedTime, double 
 /*(vi) Debug methods*/
 void printTableOfNode(Node *matrix, int dimensionOfNodes);
 void printListOfNode(Node *list, int dimensionOfNodes);
+void printTableOfNode(Node *matrix, int dimensionOfNodes, int threadsNum);
 void printListOfDouble(double *list, int dimensionOfNodes);
 void printTableOfDouble(double* matrix, int dimensionOfNodes);
 

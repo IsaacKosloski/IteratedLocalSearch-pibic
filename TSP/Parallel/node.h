@@ -2,6 +2,10 @@
 #define ITERATEDLOCALSEARCH_NODE_H
 #include <bits/stdc++.h> //This library is used to get a lot of functions and methods used by all code
 #include <algorithm>
+#include <string>
+#include <cmath>
+#include <omp.h>
+
 
 using namespace std;
 using ::string;

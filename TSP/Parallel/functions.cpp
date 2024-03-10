@@ -47,6 +47,22 @@ void doubleBridgeMove(Node* &initialSolution, Node* &perturbedSolution, int dime
         swap(perturbedSolution[i], perturbedSolution[j]);/**/
 }
 
+
+void doubleBridgeMove2(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes, int threadID)
+{
+    // Copies the original solution to the perturbed solution.
+    copyMatrixToArray(perturbedSolution, initialSolution, threadID, dimensionOfNodes);
+
+    // Generates two random indices in the range [0, dimensionOfNodes - 1].
+    int start1 = rand() % (dimensionOfNodes / 4);
+    int end1 = start1 + (dimensionOfNodes / 4);
+    int start2 = end1 + (rand() % (dimensionOfNodes / 4));
+    //int end2 = start2 + (dimensionOfNodes / 4);
+
+
+    for(int i = start1, j = start2; i < end1; i++, j++)
+        swap(perturbedSolution[i], perturbedSolution[j]);
+}
 /**********************************************************************************************************************/
 /*(iii) Local search methods*/
 void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes)
@@ -61,6 +77,7 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
     while(improvement)
     {
         improvement = false;
+        //#pragma omp parallel for collapse(2) private(bestSolution, newSolution)
         for (int i = 1; i < dimensionOfNodes - 2 ; i++)
             for (int j = i + 1; j < dimensionOfNodes; j++)
             {
@@ -90,7 +107,8 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
     {
 
         improvement = false;
-        for (int i = 1; i < dimensionOfNodes - 2 ; i++)
+        //#pragma omp parallel for collapse(2) private(bestSolution, newSolution)
+        /*for (int i = 1; i < dimensionOfNodes - 2 ; i++)
             for (int j = i + 1; j < dimensionOfNodes; j++)
             {
                 memcpy(newSolution, bestSolution, dimensionOfNodes * sizeof(Node));
@@ -102,7 +120,53 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
                     bestCost = newCost;
                     improvement = true;
                 }
-            }
+            }]*/
+    }
+    delete[] newSolution;
+}
+
+
+void linKernighan(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes)
+{
+    Node* newSolution = new Node[dimensionOfNodes];
+    memcpy(bestSolution, solution, dimensionOfNodes * sizeof(Node));
+
+    double bestCost = solutionCost(bestSolution, tsp->nodesDistance, dimensionOfNodes);
+    double newCost;
+    bool improvement = true;
+    //Continue until no further improvement is possible
+    while (improvement)
+    {
+        improvement = false;
+
+        // Iterate through all pairs of cities
+        #pragma omp parallel for collapse(4)
+        for (int i = 0; i < dimensionOfNodes - 1; i++)
+            for (int j = i + 1; j < dimensionOfNodes; j++)
+                //Generate 2-opt exchanges for each pair
+                for (int k = 0; k < dimensionOfNodes - 1; k++)
+                    for (int l = k + 1; l < dimensionOfNodes; l++)
+                    {
+                        // Check if i, j, k, l are distinct and not adjacent
+                        if ((i == j || j == i + 1) || (k == l || l == k + 1) || (i == k || j == l) || (l == i + 1 || j == k + 1))
+                            continue;
+                        // Perform 2-opt exchange to generate new tour
+                        memcpy(newSolution, bestSolution, dimensionOfNodes * sizeof(Node));
+
+                        // Add edges (i, k) and (j, l)
+                        swap(newSolution[j], newSolution[k]);
+
+                        // Calculate the new cost in tour length
+                        newCost = solutionCost(newSolution, tsp->nodesDistance, dimensionOfNodes);
+
+                        // Check if the new tour is better
+                        if (newCost < bestCost)
+                        {
+                            bestCost = newCost;
+                            improvement = true;
+                            memcpy(bestSolution, newSolution, dimensionOfNodes * sizeof(Node));
+                        }
+                    }
     }
     delete[] newSolution;
 }
@@ -212,6 +276,19 @@ void printTableOfNode(Node *matrix, int dimensionOfNodes) {
     }
     cout << endl;
 }
+
+void printTableOfNode(Node *matrix, int dimensionOfNodes, int threadsNum) {
+    for (int in = 0; in < threadsNum; in++)
+    {
+        for (int jn = 0; jn < dimensionOfNodes; jn++)
+        {
+            cout << "[" << matrix[(dimensionOfNodes * in) + jn].ID << "] " ;
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
 
 void printListOfNode(Node *list, int dimensionOfNodes) {
 

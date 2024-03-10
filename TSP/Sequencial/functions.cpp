@@ -155,7 +155,10 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
     }
     delete[] newSolution;
 }
+void threeOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes)
+{
 
+}
 void linKernighan(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes)
 {
     Node* newSolution = new Node[dimensionOfNodes];
@@ -198,7 +201,6 @@ void linKernighan(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimens
                     }
     }
     delete[] newSolution;
-
 }
 /**********************************************************************************************************************/
 /*(iv) Acceptance criterion methods*/

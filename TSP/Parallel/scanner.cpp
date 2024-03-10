@@ -1,5 +1,6 @@
 #include "scanner.h"
 
+
 Scanner::Scanner() noexcept
 {
 
@@ -7,16 +8,27 @@ Scanner::Scanner() noexcept
 
 Scanner::Scanner(string fileName) noexcept(false)
 {
-    this-> fileName = fileName;
+    this->fileName = fileName;
+    dimensionOfNodes = -1;
+    distanceType = -1;
+    explicitDistanceFormat = -1;
+    displayDataType = -1;
+    edgeWeightFormat = -1;
+    edgeWeightType = -1;
+    col = -1;
+    row = -1;
+    nodes = nullptr;
+    nodesDistance = nullptr;
+
     readFile(fileName, nodes, nodesDistance);
 }
 
 void
 Scanner::readFile(const string &fileName, Node* &nodes, Node* &nodesDistance)
 {
-    int ID;
+    int ID = 1;
     double *positionComponents;
-    string line;
+    string line = "";
 
     ifstream inputFile(fileName, ios::in);
 
@@ -53,17 +65,18 @@ Scanner::readFile(const string &fileName, Node* &nodes, Node* &nodesDistance)
             else if (explicitDistanceFormat == LOWER_DIAG_COL)
                 ;
         }*/
-        /*else*/ if (distanceType == EUC_2D)
+        /*else*/if (distanceType == EUC_2D)
         {
             positionComponents = new double[2];
-            while (getline(inputFile, line))
+            while (getline(inputFile, line) && line != "EOF")
             {
                 istringstream ssLine(line);
                 ssLine >> ID >> positionComponents[0] >> positionComponents[1];
-                nodes[ID-1] = Node(ID, 2, positionComponents);
+                nodes[ID - 1] = Node(ID, 2, positionComponents);
             }
 
             for (row = 0; row < dimensionOfNodes; row++)
+            {
                 for (col = 0; col < dimensionOfNodes; col++)
                 {
                     nodesDistance[(row * dimensionOfNodes) + col]
@@ -72,7 +85,12 @@ Scanner::readFile(const string &fileName, Node* &nodes, Node* &nodesDistance)
                                          + (pow((nodes[row].positionComponents[1] - nodes[col].positionComponents[1]), 2)))));
                 }
 
+            }
+            for (row = 0; row < dimensionOfNodes; row++)
+                delete[] nodes[row].positionComponents;
+
         }
+        delete[] positionComponents;
         /*else if (distanceType == EUC_3D)
             distanceType = EUC_3D;
         else if (distanceType == MAX_2D)
@@ -96,8 +114,6 @@ Scanner::readFile(const string &fileName, Node* &nodes, Node* &nodesDistance)
         else if (distanceType == SPECIAL)
             distanceType = SPECIAL;*/
 
-        delete[] positionComponents;
-
 
         inputFile.close();
     }
@@ -109,14 +125,14 @@ Scanner::readFile(const string &fileName, Node* &nodes, Node* &nodesDistance)
 bool
 Scanner::specificationPart(string line)
 {
-    size_t found;
-    string stringData;
+    size_t found = 0;
+    string stringData = "";
     //Verify the distance value type
     if (line.find("EDGE_WEIGHT_TYPE") != string::npos)
     {
         found = line.find(": ");
         if (found != string::npos)
-        {
+        {/**/
             stringData = line.substr(found+2);
             if (stringData == "EXPLICIT")
                 distanceType = EXPLICIT;
@@ -149,7 +165,8 @@ Scanner::specificationPart(string line)
         }
     }
         //If the distance type is equal to explicit type, then there ir the field of edge distance format
-    else if (distanceType == EXPLICIT && line.find("EDGE_WEIGHT_FORMAT") != string::npos) {
+    else if (distanceType == EXPLICIT && line.find("EDGE_WEIGHT_FORMAT") != string::npos)
+    {
         found = line.find(": ");
         if (found != string::npos)
         {

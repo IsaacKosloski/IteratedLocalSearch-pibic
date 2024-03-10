@@ -1,6 +1,5 @@
-Threads: 16
-Iterations: 10 Time: 0.1327 sec - 0.0022 min - 0.0000 horas
-0.0000 h 0.0022 min
+Iterations: 3 Time: 1.9047 sec - 0.0317 min - 0.0005 horas
+0.0000 h 0.0317 min
 Problem dimension: 198
 
 Total distance: 17054.9741

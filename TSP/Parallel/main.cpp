@@ -1,14 +1,17 @@
 //Iterated Local Search
 //Initial Solution: generate by a greedy algorithm;
 //Using OpenMP for parallel computation
-//g++ node.cpp scanner.cpp functions.cpp main.cpp -o TSP -fopenmp -Wall -pedantic
+// g++ node.cpp scanner.cpp functions.cpp main.cpp -o TspPar -fopenmp -Wall -pedantic
+// ./TspPar a280.tsp a280.res
+// ./TspPar bench-res-test/d198.tsp bench-res-test/d198.res
+
 
 
 #include "scanner.h"
 #include "functions.h"
 #include <omp.h>
 
-#define MAX_ITERATION 10
+#define MAX_ITERATION 3
 
 /* First section: Global variables */
 
@@ -26,7 +29,7 @@ int main(int argc,char **argv)
 
     //Memory allocation
     initialSolution = new Node[tsp->dimensionOfNodes];
-//    perturbedSolution = new Node[tsp->dimensionOfNodes];
+    //perturbedSolution = new Node[tsp->dimensionOfNodes];
     bestSolution = new Node[tsp->dimensionOfNodes];
 
     //Get the current time before the algorithm starts
@@ -49,25 +52,34 @@ int main(int argc,char **argv)
 
         //Copying the bestSolution array for each thread matrix row
         #pragma omp critical
+        {
             for (i = 0; i < tsp->dimensionOfNodes; i++)
                 threadsSolution[(tsp->dimensionOfNodes * omp_get_thread_num()) + i] = bestSolution[i];
+        }
+
 
         #pragma omp for
         for (iteration = 0; iteration < MAX_ITERATION; iteration++)
         {
             /*Fifth subsection: Change de route, by apply a perturbation*/
-            doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
-            doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
-            doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
-            doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
-            doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
 
             twoOpt(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes, omp_get_thread_num());
             /*Sixth subsection: Check if the new route is better than the previous one*/
             better(tsp, perturbedSolution, threadsSolution, omp_get_thread_num());
+
         }
         #pragma omp single
+        {
+            //printTableOfNode(threadsSolution, tsp->dimensionOfNodes, omp_get_num_threads());
             findBestSolution(threadsSolution, tsp->nodesDistance, bestSolution, tsp->dimensionOfNodes, omp_get_num_threads());
+            //printListOfNode(bestSolution, tsp->dimensionOfNodes);
+        }
+
     }
     //Get the current time after the algorithm ends
     auto finish = omp_get_wtime();
@@ -92,6 +104,8 @@ int main(int argc,char **argv)
     delete[] perturbedSolution;
     delete[] initialSolution;
     delete[] threadsSolution;
+    delete[] tsp->nodes;
+    delete[] tsp->nodesDistance;
     delete tsp;
 
     return 0;
