@@ -43,7 +43,14 @@ int main(int argc,char **argv)
 
     #pragma omp parallel
     {
+        //Allocating an array of disturbed solutions for each thread
+        perturbedSolution = new Node[tsp->dimensionOfNodes];
 
+        //Deallocating perturbedSolution array for each thread
+        #pragma omp critical
+        {
+            delete[] perturbedSolution;
+        }
     }
     //Get the current time after the algorithm ends
     auto finish = omp_get_wtime();

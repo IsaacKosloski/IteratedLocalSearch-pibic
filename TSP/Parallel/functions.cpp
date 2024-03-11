@@ -108,7 +108,7 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
 
         improvement = false;
         //#pragma omp parallel for collapse(2) private(bestSolution, newSolution)
-        /*for (int i = 1; i < dimensionOfNodes - 2 ; i++)
+        for (int i = 1; i < dimensionOfNodes - 2 ; i++)
             for (int j = i + 1; j < dimensionOfNodes; j++)
             {
                 memcpy(newSolution, bestSolution, dimensionOfNodes * sizeof(Node));
@@ -120,7 +120,7 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
                     bestCost = newCost;
                     improvement = true;
                 }
-            }]*/
+            }
     }
     delete[] newSolution;
 }

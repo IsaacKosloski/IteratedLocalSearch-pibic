@@ -43,12 +43,13 @@ int main(int argc,char **argv)
 
     #pragma omp parallel
     {
-        //Allocating an array of disturbed solutions for each thread
-        perturbedSolution = new Node[tsp->dimensionOfNodes];
-
         //Allocating a two-dimension array to getting each thread the best final solution
         #pragma omp single
+        {
+            //Allocating an array of disturbed solutions for each thread
+            perturbedSolution = new Node[tsp->dimensionOfNodes * omp_get_num_threads()];
             threadsSolution = new Node[tsp->dimensionOfNodes * omp_get_num_threads()];
+        }
 
         //Copying the bestSolution array for each thread matrix row
         #pragma omp critical
@@ -79,7 +80,6 @@ int main(int argc,char **argv)
             findBestSolution(threadsSolution, tsp->nodesDistance, bestSolution, tsp->dimensionOfNodes, omp_get_num_threads());
             //printListOfNode(bestSolution, tsp->dimensionOfNodes);
         }
-
     }
     //Get the current time after the algorithm ends
     auto finish = omp_get_wtime();
@@ -101,8 +101,8 @@ int main(int argc,char **argv)
 
     //Memory deallocation
     delete[] bestSolution;
-    delete[] perturbedSolution;
     delete[] initialSolution;
+    delete[] perturbedSolution;
     delete[] threadsSolution;
     delete[] tsp->nodes;
     delete[] tsp->nodesDistance;

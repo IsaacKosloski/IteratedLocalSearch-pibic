@@ -5,7 +5,7 @@
 
 #include "scanner.h"
 #include "functions.h"
-#define MAX_ITERATION 1
+#define MAX_ITERATION 1000
 
 /* First section: Global variables */
 
@@ -37,13 +37,13 @@ int main(int argc,char **argv)
     {
         /*Fifth subsection: Change de route, by apply a perturbation*/
         doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
-        /*doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
         doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
         doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
-        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);*/
+        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
+        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
 
-        //linKernighan(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
-        twoOpt(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
+        linKernighan(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
+        //twoOpt(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
         /*Sixth subsection: Check if the new route is better than the previous one*/
         better(tsp, perturbedSolution, bestSolution, tsp->dimensionOfNodes);
         iteration++;
