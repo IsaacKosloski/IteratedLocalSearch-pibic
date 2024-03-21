@@ -1,0 +1,93 @@
+--Iterated Local Search
+--Compile
+g++ component.cpp node.cpp scanner.cpp functions.cpp main.cpp -o TspPar -fopenmp -Wall -pedantic
+g++ component.cpp node.cpp scanner.cpp pfunctions.cpp main.cpp -o TspPar -fopenmp -Wall -pedantic
+--Run
+    --d198
+        --i3
+        ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/d198i3GDBO2Test.sol
+        ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/d198i3GDBO2.sol
+        ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/d198i3GDB2O2.sol
+
+        --i4
+        ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/d198i4GDBO2.sol
+
+        --i5
+        ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/d198i5GDBO2.sol
+
+    --a280
+        --i3
+        ./TspPar ../Benchmarks/a280.tsp/a280.tsp ../Solutions/Parallel/a280/a280i3GDBO2.sol
+        --i4
+        ./TspPar ../Benchmarks/a280.tsp/a280.tsp ../Solutions/Parallel/a280/a280i4GDBO2.sol
+        --i5
+        ./TspPar ../Benchmarks/a280.tsp/a280.tsp ../Solutions/Parallel/a280/a280i5GDBO2.sol
+
+    --lin318
+        --i3
+        ./TspPar ../Benchmarks/lin318.tsp/lin318.tsp ../Solutions/Parallel/lin318/lin318i3GDBO2.sol
+        --i4
+        ./TspPar ../Benchmarks/lin318.tsp/lin318.tsp ../Solutions/Parallel/lin318/lin318i4GDBO2.sol
+        --i5
+        ./TspPar ../Benchmarks/lin318.tsp/lin318.tsp ../Solutions/Parallel/lin318/lin318i5GDBO2.sol
+
+    --pcb442
+        --i3
+        ./TspPar ../Benchmarks/pcb442.tsp/pcb442.tsp ../Solutions/Parallel/pcb442/pcb442i3GDBO2.sol
+        --i4
+        ./TspPar ../Benchmarks/pcb442.tsp/pcb442.tsp ../Solutions/Parallel/pcb442/pcb442i4GDBO2.sol
+        --i5
+        ./TspPar ../Benchmarks/pcb442.tsp/pcb442.tsp ../Solutions/Parallel/pcb442/pcb442i5GDBO2.sol
+
+    --rat783
+        --i3
+        ./TspPar ../Benchmarks/rat783.tsp/rat783.tsp ../Solutions/Parallel/rat783/rat783i3GDBO2.sol
+        --i4
+        ./TspPar ../Benchmarks/rat783.tsp/rat783.tsp ../Solutions/Parallel/rat783/rat783i4GDBO2.sol
+        --i5
+        ./TspPar ../Benchmarks/rat783.tsp/rat783.tsp ../Solutions/Parallel/rat783/rat783i5GDBO2.sol
+
+    --u1060
+        --i3
+        ./TspPar ../Benchmarks/u1060.tsp/u1060.tsp ../Solutions/Parallel/u1060/u1060i3GDBO2.sol
+        --i4
+        ./TspPar ../Benchmarks/u1060.tsp/u1060.tsp ../Solutions/Parallel/u1060/u1060i4GDBO2.sol
+        --i5
+        ./TspPar ../Benchmarks/u1060.tsp/u1060.tsp ../Solutions/Parallel/u1060/u1060i5GDBO2.sol
+
+    --pcb1173
+        --i3
+        ./TspPar ../Benchmarks/pcb1173.tsp/pcb1173.tsp ../Solutions/Parallel/pcb1173/pcb1173i3GDBO2.sol
+        --i4
+        ./TspPar ../Benchmarks/pcb1173.tsp/pcb1173.tsp ../Solutions/Parallel/pcb1173/pcb1173i4GDBO2.sol
+        --i5
+        ./TspPar ../Benchmarks/pcb1173.tsp/pcb1173.tsp ../Solutions/Parallel/pcb1173/pcb1173i5GDBO2.sol
+
+    --fl1577
+        --i3
+        ./TspPar ../Benchmarks/fl1577.tsp/fl1577.tsp ../Solutions/Parallel/fl1577/fl1577i3GDBO2.sol
+        --i4
+        ./TspPar ../Benchmarks/fl1577.tsp/fl1577.tsp ../Solutions/Parallel/fl1577/fl1577i4GDBO2.sol
+        --i5
+        ./TspPar ../Benchmarks/fl1577.tsp/fl1577.tsp ../Solutions/Parallel/fl1577/fl1577i5GDBO2.sol
+
+--Instance:
+<type><dimension><iterations><implementMethods>
+
+    --type:
+
+    --dimension:
+
+    --iterations:
+        -i3 : 10 iterations
+        -i4 : 1000 iterations
+        -i5 : 10 000 iterations
+    --implementMethods:
+        -R   : Random (re)start;
+        -G   : greedy algorithm;
+        -DB  : Double Bridge Move;
+        -DB2 : Double Bridge Move second implementation;
+        -O2  : 2-opt algorithm;
+        -O3  : 3-opt algorithm;
+        -xj  : times j, with 1 < j, when an algorithm is executed simultaneous;
+        -Obs : When this section is omitted, consider G-DB2-O2;

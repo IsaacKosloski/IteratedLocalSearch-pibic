@@ -1,17 +1,9 @@
-//Iterated Local Search
+/*Iterated Local Search
 //Initial Solution: generate by a greedy algorithm;
-//Using OpenMP for parallel computation
-// g++ node.cpp scanner.cpp functions.cpp main.cpp -o TspPar -fopenmp -Wall -pedantic
-// ./TspPar a280.tsp a280.res
-// ./TspPar bench-res-test/d198.tsp bench-res-test/d198.res
-
-
-
-#include "scanner.h"
+//Using OpenMP for parallel computation*/
 #include "functions.h"
-#include <omp.h>
 
-#define MAX_ITERATION 3
+#define MAX_ITERATION 10/**/ /*1000*/ /*10000*/
 
 /* First section: Global variables */
 
@@ -20,8 +12,9 @@
 int main(int argc,char **argv)
 {
     /*First subsection: variables and data structs declaration (and some default definition)*/
-    int iteration = 0, i;
-    Node *initialSolution, *perturbedSolution, *bestSolution, *threadsSolution;
+    int iteration = 0;
+    double bestSolutionWeight = numeric_limits<double>::max();
+    Node *initialSolution, *bestSolution;
 
 
     /* Second subsection: data input*/
@@ -41,45 +34,42 @@ int main(int argc,char **argv)
     /*Fourth subsection: Apply a local search*/
     twoOpt(tsp, initialSolution, bestSolution ,tsp->dimensionOfNodes);
 
-    #pragma omp parallel
+    //omp_set_nested(1);
+
+    #pragma omp parallel //num_threads(omp_get_num_threads()/2)
     {
-        //Allocating a two-dimension array to getting each thread the best final solution
-        #pragma omp single
-        {
-            //Allocating an array of disturbed solutions for each thread
-            perturbedSolution = new Node[tsp->dimensionOfNodes * omp_get_num_threads()];
-            threadsSolution = new Node[tsp->dimensionOfNodes * omp_get_num_threads()];
-        }
 
-        //Copying the bestSolution array for each thread matrix row
-        #pragma omp critical
-        {
-            for (i = 0; i < tsp->dimensionOfNodes; i++)
-                threadsSolution[(tsp->dimensionOfNodes * omp_get_thread_num()) + i] = bestSolution[i];
-        }
+        double threadsWeight = 0.0;
+        Node* threadsSolution = new Node[tsp->dimensionOfNodes];
+        Node* perturbedSolution = new Node[tsp->dimensionOfNodes];
+        memcpy(threadsSolution, bestSolution, tsp->dimensionOfNodes * sizeof(Node));
 
-
-        #pragma omp for
+        #pragma omp for schedule(auto)  //reduction(min:threadsSolution) /*customize a function for reduction on solution*/
         for (iteration = 0; iteration < MAX_ITERATION; iteration++)
         {
             /*Fifth subsection: Change de route, by apply a perturbation*/
-            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
-            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
-            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
-            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
-            doubleBridgeMove2(threadsSolution, perturbedSolution , tsp->dimensionOfNodes, omp_get_thread_num());
+            #pragma omp parallel
+            {
+                doubleBridgeMove(threadsSolution, perturbedSolution , tsp->dimensionOfNodes);
+            }
+            /*Then, applying a local search*/
+            twoOpt(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
 
-            twoOpt(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes, omp_get_thread_num());
             /*Sixth subsection: Check if the new route is better than the previous one*/
-            better(tsp, perturbedSolution, threadsSolution, omp_get_thread_num());
-
+            better(tsp, perturbedSolution, threadsSolution, threadsWeight);
         }
-        #pragma omp single
+        #pragma omp critical
         {
-            //printTableOfNode(threadsSolution, tsp->dimensionOfNodes, omp_get_num_threads());
-            findBestSolution(threadsSolution, tsp->nodesDistance, bestSolution, tsp->dimensionOfNodes, omp_get_num_threads());
-            //printListOfNode(bestSolution, tsp->dimensionOfNodes);
+            if(threadsWeight < bestSolutionWeight)
+            {
+                bestSolutionWeight = threadsWeight;
+                memcpy(bestSolution, threadsSolution, tsp->dimensionOfNodes * sizeof(Node));
+            }
         }
+        memcpy(bestSolution, threadsSolution, tsp->dimensionOfNodes * sizeof(Node));
+
+        delete[] perturbedSolution;
+        delete[] threadsSolution;
     }
     //Get the current time after the algorithm ends
     auto finish = omp_get_wtime();
@@ -102,8 +92,6 @@ int main(int argc,char **argv)
     //Memory deallocation
     delete[] bestSolution;
     delete[] initialSolution;
-    delete[] perturbedSolution;
-    delete[] threadsSolution;
     delete[] tsp->nodes;
     delete[] tsp->nodesDistance;
     delete tsp;

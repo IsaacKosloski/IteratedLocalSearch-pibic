@@ -1,0 +1,90 @@
+--Iterated Local Search
+--Compile
+g++ component.cpp node.cpp scanner.cpp functions.cpp main.cpp -o TspSeq -Wall -pedantic
+--Run
+    --d198
+        --i3
+        ./TspSeq ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Sequential/d198/d198i3GDBO2Test.sol
+        ./TspSeq ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Sequential/d198/d198i3GDBO2.sol
+        ./TspSeq ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Sequential/d198/d198i3GDB2O2.sol
+
+        --i4
+        ./TspSeq ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Sequential/d198/d198i4GDBO2.sol
+
+        --i5
+        ./TspSeq ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Sequential/d198/d198i5GDBO2.sol
+
+    --a280
+        --i3
+        ./TspSeq ../Benchmarks/a280.tsp/a280.tsp ../Solutions/Sequential/a280/a280i3GDBO2.sol
+        --i4
+        ./TspSeq ../Benchmarks/a280.tsp/a280.tsp ../Solutions/Sequential/a280/a280i4GDBO2.sol
+        --i5
+        ./TspSeq ../Benchmarks/a280.tsp/a280.tsp ../Solutions/Sequential/a280/a280i5GDBO2.sol
+
+    --lin318
+        --i3
+        ./TspSeq ../Benchmarks/lin318.tsp/lin318.tsp ../Solutions/Sequential/lin318/lin318i3GDBO2.sol
+        --i4
+        ./TspSeq ../Benchmarks/lin318.tsp/lin318.tsp ../Solutions/Sequential/lin318/lin318i4GDBO2.sol
+        --i5
+        ./TspSeq ../Benchmarks/lin318.tsp/lin318.tsp ../Solutions/Sequential/lin318/lin318i5GDBO2.sol
+
+    --pcb442
+        --i3
+        ./TspSeq ../Benchmarks/pcb442.tsp/pcb442.tsp ../Solutions/Sequential/pcb442/pcb442i3GDBO2.sol
+        --i4
+        ./TspSeq ../Benchmarks/pcb442.tsp/pcb442.tsp ../Solutions/Sequential/pcb442/pcb442i4GDBO2.sol
+        --i5
+        ./TspSeq ../Benchmarks/pcb442.tsp/pcb442.tsp ../Solutions/Sequential/pcb442/pcb442i5GDBO2.sol
+
+    --rat783
+        --i3
+        ./TspSeq ../Benchmarks/rat783.tsp/rat783.tsp ../Solutions/Sequential/rat783/rat783i3GDBO2.sol
+        --i4
+        ./TspSeq ../Benchmarks/rat783.tsp/rat783.tsp ../Solutions/Sequential/rat783/rat783i4GDBO2.sol
+        --i5
+        ./TspSeq ../Benchmarks/rat783.tsp/rat783.tsp ../Solutions/Sequential/rat783/rat783i5GDBO2.sol
+
+    --u1060
+        --i3
+        ./TspSeq ../Benchmarks/u1060.tsp/u1060.tsp ../Solutions/Sequential/u1060/u1060i3GDBO2.sol
+        --i4
+        ./TspSeq ../Benchmarks/u1060.tsp/u1060.tsp ../Solutions/Sequential/u1060/u1060i4GDBO2.sol
+        --i5
+        ./TspSeq ../Benchmarks/u1060.tsp/u1060.tsp ../Solutions/Sequential/u1060/u1060i5GDBO2.sol
+
+    --pcb1173
+        --i3
+        ./TspSeq ../Benchmarks/pcb1173.tsp/pcb1173.tsp ../Solutions/Sequential/pcb1173/pcb1173i3GDBO2.sol
+        --i4
+        ./TspSeq ../Benchmarks/pcb1173.tsp/pcb1173.tsp ../Solutions/Sequential/pcb1173/pcb1173i4GDBO2.sol
+        --i5
+        ./TspSeq ../Benchmarks/pcb1173.tsp/pcb1173.tsp ../Solutions/Sequential/pcb1173/pcb1173i5GDBO2.sol
+
+    --fl1577
+        --i3
+        ./TspSeq ../Benchmarks/fl1577.tsp/fl1577.tsp ../Solutions/Sequential/fl1577/fl1577i3GDBO2.sol
+        --i4
+        ./TspSeq ../Benchmarks/fl1577.tsp/fl1577.tsp ../Solutions/Sequential/fl1577/fl1577i4GDBO2.sol
+        --i5
+        ./TspSeq ../Benchmarks/fl1577.tsp/fl1577.tsp ../Solutions/Sequential/fl1577/fl1577i5GDBO2.sol
+
+--Instance:
+<type><dimension><iterations><implementMethods>
+
+    --type:
+
+    --dimension:
+
+    --iterations:
+
+    --implementMethods:
+        -R   : Random (re)start;
+        -G   : greedy algorithm;
+        -DB  : Double Bridge Move;
+        -DB2 : Double Bridge Move second implementation;
+        -O2  : 2-opt algorithm;
+        -O3  : 3-opt algorithm;
+        -xj  : times j, with 1 < j, when an algorithm is executed simultaneous;
+        -Obs : When this section is omitted, consider G-DB2-O2;

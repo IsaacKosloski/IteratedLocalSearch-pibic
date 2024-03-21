@@ -1,0 +1,6 @@
+0- Ensaios com 10^3, 10^4 e 10^5 iterações (10^6 tem um tempo muito grande de execução);
+    00- Usar como parâmetro quantidades fixas de iterações ou quantidade de tempo fixo?
+1- Quantos ensaios devem ser feitos?
+2- Quais medidas e informações são relevantes?
+3- Paralelo que explora melhores soluções VS Paralelo que explora melhor desempenho.
+4-

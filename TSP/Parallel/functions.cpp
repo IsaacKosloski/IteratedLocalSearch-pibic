@@ -34,9 +34,24 @@ void greedyTSP(Scanner* &tsp, Node* &initialSolution)
 
 /**********************************************************************************************************************/
 /*(ii) Perturbation methods*/
+void doubleBridgeMove(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes)
+{
+    // Copies the original solution to the perturbed solution.
+    memcpy(perturbedSolution, initialSolution, dimensionOfNodes * sizeof(Node));
+
+    // Generates two random indices in the range [0, dimensionOfNodes - 1].
+    int start1 = rand() % (dimensionOfNodes / 4);
+    int end1 = start1 + (dimensionOfNodes / 4);
+    int start2 = end1 + (rand() % (dimensionOfNodes / 4));
+    int end2 = start2 + (dimensionOfNodes / 4);
+
+    for(int i = start1, j = end2; i < end1; i++, j--)
+        swap(perturbedSolution[i], perturbedSolution[j]);
+}
+
 void doubleBridgeMove(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes, int threadID)
 {
-    copyMatrixToArray(perturbedSolution, initialSolution, threadID, dimensionOfNodes);
+    copyMatrixLine(perturbedSolution, initialSolution, threadID, dimensionOfNodes);
 
     int start1 = rand() % (dimensionOfNodes / 4);
     int end1 = start1 + (dimensionOfNodes / 4);
@@ -44,14 +59,13 @@ void doubleBridgeMove(Node* &initialSolution, Node* &perturbedSolution, int dime
     int end2 = start2 + (dimensionOfNodes / 4);
 
     for(int i = start1, j = end2; i < end1; i++, j--)
-        swap(perturbedSolution[i], perturbedSolution[j]);/**/
+        swap(perturbedSolution[(dimensionOfNodes * threadID) + i], perturbedSolution[(dimensionOfNodes * threadID) + j]);
 }
-
 
 void doubleBridgeMove2(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes, int threadID)
 {
     // Copies the original solution to the perturbed solution.
-    copyMatrixToArray(perturbedSolution, initialSolution, threadID, dimensionOfNodes);
+    copyMatrixLine(perturbedSolution, initialSolution, threadID, dimensionOfNodes);
 
     // Generates two random indices in the range [0, dimensionOfNodes - 1].
     int start1 = rand() % (dimensionOfNodes / 4);
@@ -61,10 +75,11 @@ void doubleBridgeMove2(Node* &initialSolution, Node* &perturbedSolution, int dim
 
 
     for(int i = start1, j = start2; i < end1; i++, j++)
-        swap(perturbedSolution[i], perturbedSolution[j]);
+        swap(perturbedSolution[(dimensionOfNodes * threadID) + i], perturbedSolution[(dimensionOfNodes * threadID) + j]);
 }
 /**********************************************************************************************************************/
 /*(iii) Local search methods*/
+//2-Opt algorithm with one thread (for first local search)
 void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes)
 {
     Node* newSolution = new Node[dimensionOfNodes];
@@ -95,10 +110,11 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
     delete[] newSolution;
 }
 
+//2-Opt algorithm for more threads (for iterated local search)
 void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes, int threadID)
 {
     Node* newSolution = new Node[dimensionOfNodes];
-    copyMatrixToArray(solution, bestSolution, threadID, dimensionOfNodes);
+    copyMatrixLine(solution, bestSolution, threadID, dimensionOfNodes);
 
     double bestCost = solutionCost(bestSolution, tsp->nodesDistance, dimensionOfNodes, threadID);
     bool improvement = true;
@@ -111,12 +127,12 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
         for (int i = 1; i < dimensionOfNodes - 2 ; i++)
             for (int j = i + 1; j < dimensionOfNodes; j++)
             {
-                memcpy(newSolution, bestSolution, dimensionOfNodes * sizeof(Node));
+                copyMatrixToArray(newSolution, bestSolution,  threadID,dimensionOfNodes);
                 reverse(newSolution + i, newSolution + j);
                 double newCost = solutionCost(newSolution, tsp->nodesDistance, dimensionOfNodes);
                 if (newCost < bestCost)
                 {
-                    memcpy(bestSolution, newSolution, dimensionOfNodes * sizeof(Node));
+                    copyArrayToMatrix(bestSolution, newSolution, threadID ,dimensionOfNodes);
                     bestCost = newCost;
                     improvement = true;
                 }
@@ -125,7 +141,34 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
     delete[] newSolution;
 }
 
+/*void threeOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes)
+{
+    Node* newSolution = new Node[dimensionOfNodes];
+    copyMatrixLine(solution, bestSolution, threadID, dimensionOfNodes);
 
+    double bestCost = solutionCost(bestSolution, tsp->nodesDistance, dimensionOfNodes, threadID);
+    bool improvement = true;
+
+    while(improvement)
+    {
+
+        improvement = false;
+        for (int i = 1; i < dimensionOfNodes - 2 ; i++)
+            for (int j = i + 1; j < dimensionOfNodes; j++)
+            {
+                copyMatrixToArray(newSolution, bestSolution,  threadID,dimensionOfNodes);
+                reverse(newSolution + i, newSolution + j);
+                double newCost = solutionCost(newSolution, tsp->nodesDistance, dimensionOfNodes);
+                if (newCost < bestCost)
+                {
+                    copyArrayToMatrix(bestSolution, newSolution, threadID ,dimensionOfNodes);
+                    bestCost = newCost;
+                    improvement = true;
+                }
+            }
+    }
+    delete[] newSolution;
+}*/
 void linKernighan(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes)
 {
     Node* newSolution = new Node[dimensionOfNodes];
@@ -173,13 +216,28 @@ void linKernighan(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimens
 
 /**********************************************************************************************************************/
 /*(iv) Acceptance criterion methods*/
+void better(Scanner* tsp, Node* &perturbedSolution, Node* &bestSolution, double &bestWeight)
+{
+    double weightPertubed = solutionCost(perturbedSolution, tsp->nodesDistance, tsp->dimensionOfNodes);
+    double weightBest = solutionCost(bestSolution, tsp->nodesDistance, tsp->dimensionOfNodes);
+    bestWeight = weightBest;
+    /*Check if the new route is better than the previous one*/
+    if ( weightPertubed < weightBest)
+    {
+        /*If the new route is better than the previous one, update the best route*/
+        memcpy(bestSolution, perturbedSolution, tsp->dimensionOfNodes * sizeof(Node));
+        bestWeight = weightPertubed;
+
+    }
+}
+
 void better(Scanner* tsp, Node* &perturbedSolution, Node* &threadsSolution, int threadID)
 {
     /*Check if the new route is better than the previous one*/
     if (solutionCost(perturbedSolution, tsp->nodesDistance, tsp->dimensionOfNodes) <
         solutionCost(threadsSolution, tsp->nodesDistance, tsp->dimensionOfNodes, threadID))
         /*If the new route is better than the previous one, update the best route*/
-        copyArrayToMatrix(threadsSolution, perturbedSolution, threadID, tsp->dimensionOfNodes);
+        copyMatrixLine(threadsSolution, perturbedSolution, threadID, tsp->dimensionOfNodes);
 }
 
 /**********************************************************************************************************************/
@@ -212,6 +270,12 @@ void copyArrayToMatrix(Node* &destination, Node* &source, int origin, int size)
 {
     for (int i = 0; i < size; i++)
         destination[(size * origin) + i] = source[i];
+}
+
+void copyMatrixLine(Node* &destination, Node* &source, int origin, int size)
+{
+    for (int i = 0; i < size; i++)
+        destination[(size * origin) + i] = source[(size * origin) + i];
 }
 
 void findBestSolution(Node* &solutions, Node* &nodesDistance, Node* &bestSolution, int dimensionOfNodes, int numberOfSolutions)

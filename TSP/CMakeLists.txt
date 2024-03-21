@@ -3,14 +3,14 @@ project(IteratedLocalSearch_pibic)
 
 set(CMAKE_CXX_STANDARD 14)
 
-include_directories(Sequencial)
+include_directories(Sequential)
 
 add_executable(TspSeq
-        Sequencial/comments.cpp
-        Sequencial/functions.cpp
-        Sequencial/functions.h
-        Sequencial/main.cpp
-        Sequencial/node.cpp
-        Sequencial/node.h
-        Sequencial/scanner.cpp
-        Sequencial/scanner.h)
+        Sequential/comments.cpp
+        Sequential/functions.cpp
+        Sequential/functions.h
+        Sequential/main.cpp
+        Sequential/node.cpp
+        Sequential/node.h
+        Sequential/scanner.cpp
+        Sequential/scanner.h)

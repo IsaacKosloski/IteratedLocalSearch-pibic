@@ -9,7 +9,7 @@ add_executable(TspSeq
         comments.cpp
         functions.cpp
         functions.h
-        main.cpp
+        ../Deprecated/mainParallel1.cpp
         node.cpp
         node.h
         scanner.cpp

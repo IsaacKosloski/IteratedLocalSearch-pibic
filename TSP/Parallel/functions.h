@@ -1,15 +1,16 @@
 #ifndef ITERATEDLOCALSEARCH_FUNCTIONS_H
 #define ITERATEDLOCALSEARCH_FUNCTIONS_H
 #include "scanner.h"
-#include "node.h"
 #include <omp.h>
 #include <random>
 #include <algorithm>
+#include <cfloat>
 
 /*(i) Initial solution methods*/
 void greedyTSP(Scanner* &tsp, Node* &initialSolution);
 /**********************************************************************************************************************/
 /*(ii) Perturbation methods*/
+void doubleBridgeMove(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes);
 void doubleBridgeMove(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes, int threadID);
 void doubleBridgeMove2(Node* &initialSolution, Node* &perturbedSolution, int dimensionOfNodes, int threadID);
 /**********************************************************************************************************************/
@@ -19,6 +20,7 @@ void twoOpt(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfN
 void linKernighan(Scanner* tsp, Node* &solution, Node* &bestSolution, int dimensionOfNodes);
 /**********************************************************************************************************************/
 /*(iv) Acceptance criterion methods*/
+void better(Scanner* tsp, Node* &perturbedSolution, Node* &bestSolution, double &bestWeight);
 void better(Scanner* tsp, Node* &perturbedSolution, Node* &threadsSolution, int threadID);
 /**********************************************************************************************************************/
 /*(v) Auxiliary methods*/
@@ -26,6 +28,7 @@ double solutionCost(Node* &solution, Node* &nodesDistance, int dimensionOfNodes)
 double solutionCost(Node* &solution, Node* &nodesDistance, int dimensionOfNodes, int threadID);
 void copyMatrixToArray(Node* &destination, Node* &source, int origin, int size);
 void copyArrayToMatrix(Node* &destination, Node* &source, int origin, int size);
+void copyMatrixLine(Node* &destination, Node* &source, int origin, int size);
 void findBestSolution(Node* &solutions, Node* &nodesDistance, Node* &bestSolution, int dimensionOfNodes, int numberOfSolutions);
 void printResult(Node* bestSolution, char* fileName, double elapsedTime, double cost, int dimensionOfNodes, int iterations);
 /**********************************************************************************************************************/
