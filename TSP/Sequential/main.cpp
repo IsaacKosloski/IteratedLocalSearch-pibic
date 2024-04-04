@@ -6,7 +6,7 @@
 
 #include "scanner.h"
 #include "functions.h"
-#define MAX_ITERATION 100
+#define MAX_ITERATION 1000
 
 /* First section: Global variables */
 

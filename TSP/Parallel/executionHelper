@@ -6,8 +6,8 @@ g++ component.cpp node.cpp scanner.cpp pfunctions.cpp main.cpp -o TspPar -fopenm
     --d198
         --i3
         ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/d198i3GDBO2Test.sol
-        ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/d198i3GDBO2.sol
-        ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/d198i3GDB2O2.sol
+        ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/B/d198i3GDBO2.sol
+        ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/B/d198i3GDB2O2.sol
 
         --i4
         ./TspPar ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Parallel/d198/d198i4GDBO2.sol

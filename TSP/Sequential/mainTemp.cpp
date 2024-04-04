@@ -10,7 +10,7 @@
 #include "functions.h"
 #include <chrono>
 #define MAX_ITERATION 1000
-#define MAX_TIME_MS 3600000 //120000
+#define MAX_TIME_MS 7200000//3 600 000 //120 000
 
 /* First section: Global variables */
 
@@ -44,15 +44,11 @@ int main(int argc,char **argv)
     //twoOpt(tsp, initialSolution, bestSolution, tsp->dimensionOfNodes);
     while (iteration < MAX_ITERATION && chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - start) < duration)
     {
-        /*Fifth subsection: Change de route, by apply a perturbation*/
-        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
-        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
-        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
-        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
-        doubleBridgeMove2(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
 
-        linKernighan(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
-        //twoOpt(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
+        /*Fifth subsection: Change de route, by apply a perturbation*/
+        doubleBridgeMove(bestSolution, perturbedSolution , tsp->dimensionOfNodes);
+        //linKernighan(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
+        twoOpt(tsp, perturbedSolution, perturbedSolution, tsp->dimensionOfNodes);
         /*Sixth subsection: Check if the new route is better than the previous one*/
         better(tsp, perturbedSolution, bestSolution, tsp->dimensionOfNodes);
         iteration++;
