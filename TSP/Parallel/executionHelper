@@ -1,8 +1,8 @@
 --Iterated Local Search
 --Compile
-g++ component.cpp node.cpp scanner.cpp functions.cpp main.cpp -o bin/TspPar -fopenmp -Wall -pedantic
-g++ component.cpp node.cpp scanner.cpp functions.cpp mainExec.cpp -o bin/TspPar -fopenmp -Wall -pedantic
-g++ component.cpp node.cpp scanner.cpp pfunctions.cpp main.cpp -o bin/TspPar -fopenmp -Wall -pedantic
+g++ component.cpp node.cpp scanner.cpp functions.cpp main.cpp -o ../bin/TspPar -fopenmp -Wall -pedantic
+g++ component.cpp node.cpp scanner.cpp functions.cpp mainExec.cpp -o ../bin/TspPar -fopenmp -Wall -pedantic
+g++ component.cpp node.cpp scanner.cpp pfunctions.cpp main.cpp -o ../bin/TspPar -fopenmp -Wall -pedantic
 --Run
     --d198
         --i3

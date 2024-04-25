@@ -1,8 +1,8 @@
 --Iterated Local Search
 --Compile
-g++ component.cpp node.cpp scanner.cpp functions.cpp main.cpp -o TspSeq -Wall -pedantic
-g++ component.cpp node.cpp scanner.cpp functions.cpp mainTemp.cpp -o TspSeq -Wall -pedantic
-g++ component.cpp node.cpp scanner.cpp functions.cpp mainExec.cpp -o TspSeq -Wall -pedantic
+g++ component.cpp node.cpp scanner.cpp functions.cpp main.cpp -o ../bin/TspSeq -Wall -pedantic
+g++ component.cpp node.cpp scanner.cpp functions.cpp mainTemp.cpp -o ../bin/TspSeq -Wall -pedantic
+g++ component.cpp node.cpp scanner.cpp functions.cpp mainExec.cpp -o ../bin/TspSeq -Wall -pedantic
 
 --Run
     --d198

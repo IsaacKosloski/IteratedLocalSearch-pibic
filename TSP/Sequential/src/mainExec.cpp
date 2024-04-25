@@ -66,7 +66,7 @@ int main(int argc,char **argv)
 
 
         string dimension(argv[2]);
-        string outputFile1 = "../Solutions/Sequential/" + dimension + "/Tempestade/" + dimension + "i3GDBO2B" + to_string(exec) + ".sol" ;
+        string outputFile1 = "../../Solutions/Sequential/" + dimension + "/Tempestade/" + dimension + "i3GDBO2B" + to_string(exec) + ".sol" ;
         char const *outputFileC = outputFile1.c_str();
 
         double bestSolutionCost = solutionCost(bestSolution, tsp->nodesDistance, tsp->dimensionOfNodes);

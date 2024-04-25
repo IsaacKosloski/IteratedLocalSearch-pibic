@@ -90,7 +90,7 @@ int main(int argc,char **argv)
         cout << "Elapsed time: " << elapsed << " s\n";
 
         string dimension(argv[2]);
-        string outputFile1 = "../Solutions/Parallel/" + dimension + "/Tempestade/" + dimension + "i3GDBO2B" + to_string(exec) + ".sol" ;
+        string outputFile1 = "../../Solutions/Parallel/" + dimension + "/Tempestade/" + dimension + "i3GDBO2B" + to_string(exec) + ".sol" ;
         char const *outputFileC = outputFile1.c_str();
 
         double bestSolutionCost = solutionCost(bestSolution, tsp->nodesDistance, tsp->dimensionOfNodes);
