@@ -6,11 +6,11 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(Sequential)
 
 add_executable(TspSeq
-        Sequential/comments.cpp
-        Sequential/functions.cpp
-        Sequential/functions.h
-        Sequential/main.cpp
-        Sequential/node.cpp
-        Sequential/node.h
-        Sequential/scanner.cpp
-        Sequential/scanner.h)
+        Sequential/src/comments.cpp
+        Sequential/src/functions.cpp
+        Sequential/src/functions.h
+        Sequential/src/main.cpp
+        Sequential/src/node.cpp
+        Sequential/src/node.h
+        Sequential/src/scanner.cpp
+        Sequential/src/scanner.h)

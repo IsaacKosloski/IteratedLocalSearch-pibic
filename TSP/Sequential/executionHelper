@@ -2,6 +2,7 @@
 --Compile
 g++ component.cpp node.cpp scanner.cpp functions.cpp main.cpp -o TspSeq -Wall -pedantic
 g++ component.cpp node.cpp scanner.cpp functions.cpp mainTemp.cpp -o TspSeq -Wall -pedantic
+g++ component.cpp node.cpp scanner.cpp functions.cpp mainExec.cpp -o TspSeq -Wall -pedantic
 
 --Run
     --d198

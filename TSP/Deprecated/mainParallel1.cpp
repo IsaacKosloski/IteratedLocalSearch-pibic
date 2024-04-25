@@ -31,8 +31,8 @@ g++ node.cpp scanner.cpp functions.cpp main.cpp -o TspPar -fopenmp -Wall -pedant
 
 */
 
-#include "../Parallel/scanner.h"
-#include "../Parallel/functions.h"
+#include "../Parallel/src/scanner.h"
+#include "../Parallel/src/functions.h"
 #include <omp.h>
 
 #define MAX_ITERATION 1000

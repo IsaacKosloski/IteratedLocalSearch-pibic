@@ -6,11 +6,10 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(Paralelo)
 
 add_executable(TspSeq
-        comments.cpp
-        functions.cpp
-        functions.h
+        src/functions.cpp
+        src/functions.h
         ../Deprecated/mainParallel1.cpp
-        node.cpp
-        node.h
-        scanner.cpp
-        scanner.h)
+        src/node.cpp
+        src/node.h
+        src/scanner.cpp
+        src/scanner.h)
