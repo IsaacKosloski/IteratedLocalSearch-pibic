@@ -28,8 +28,6 @@ int main(int argc,char **argv)
         perturbedSolution = new Node[tsp->dimensionOfNodes];
         bestSolution = new Node[tsp->dimensionOfNodes];
 
-
-
         //Get the current time before the algorithm starts
         auto start = chrono::high_resolution_clock::now();
 
@@ -54,16 +52,16 @@ int main(int argc,char **argv)
         auto finish = chrono::high_resolution_clock::now();
 
         /*Seventh subsection: Print the results*/
-        cout << "Best solution cost: " << solutionCost(bestSolution, tsp->nodesDistance, tsp->dimensionOfNodes) << endl;
+        /*cout << "Best solution cost: " << solutionCost(bestSolution, tsp->nodesDistance, tsp->dimensionOfNodes) << endl;
         cout << "Best solution rout: ";
         for (int i = 0; i < tsp->dimensionOfNodes; i++)
-            cout << "[" << bestSolution[i].ID << "] ";
+            cout << "[" << bestSolution[i].ID << "] ";*/
 
         //Calculate the time duration by subtracting the start time from the finish time
         chrono::duration<double> elapsed = finish - start;
 
         //Print the time duration
-        cout << "Elapsed time: " << elapsed.count() << " s\n";
+        //cout << "Elapsed time: " << elapsed.count() << " s\n";
 
         string dimension(argv[2]);
         string outputFile1 = "../../Solutions/Sequential/" + dimension + "/test/" + dimension + "i3GDBO2B" + to_string(exec) + ".sol" ;
