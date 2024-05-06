@@ -78,19 +78,20 @@ int main(int argc,char **argv)
         auto finish = omp_get_wtime();
 
         /*Seventh subsection: Print the results*/
-        cout << "Best solution cost: "<< solutionCost(bestSolution, tsp->nodesDistance, tsp->dimensionOfNodes) << endl;
+        /*cout << "Best solution cost: "<< solutionCost(bestSolution, tsp->nodesDistance, tsp->dimensionOfNodes) << endl;
         cout << "Best solution rout: ";
         for (int i = 0; i < tsp->dimensionOfNodes; i++)
-            cout << "[" << bestSolution[i].ID << "] ";
+            cout << "[" << bestSolution[i].ID << "] ";*/
 
         //Calculate the time duration by subtracting the start time from the finish time
         auto elapsed = finish - start;
 
         //Print the time duration
+        cout << "Exec num: " << exec << "\n";
         cout << "Elapsed time: " << elapsed << " s\n";
 
         string dimension(argv[2]);
-        string outputFile1 = "../../Solutions/Parallel/" + dimension + "/Tempestade/" + dimension + "i3GDBO2B" + to_string(exec) + ".sol" ;
+        string outputFile1 = "../../Solutions/Tempestade/Parallel/" + dimension + "/" + dimension + "i3GDBO2B" + to_string(exec) + ".sol" ;
         char const *outputFileC = outputFile1.c_str();
 
         double bestSolutionCost = solutionCost(bestSolution, tsp->nodesDistance, tsp->dimensionOfNodes);
