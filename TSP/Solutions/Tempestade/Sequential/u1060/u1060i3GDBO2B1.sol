@@ -1,5 +1,5 @@
-Iterations: 1000 Time: 11712.3486 sec - 195.2058 min - 3.2534 horas
-3.0000 h 15.2058 min
+Iterations: 1000 Time: 11689.7762 sec - 194.8296 min - 3.2472 horas
+3.0000 h 14.8296 min
 Problem dimension: 1060
 
 Total distance: 231750.8678
