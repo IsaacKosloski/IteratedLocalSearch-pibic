@@ -1,8 +1,8 @@
 //Iterated Local Search
 //Initial Solution: generate by a greedy algorithm;
 //g++ node.cpp scanner.cpp functions.cpp main.cpp -o TspSeq2 -Wall -pedantic
-//./TspSeq2 ../Benchmarks/a280.tsp/a280.tsp ../Solutions/Sequential/a280.sol
-//./TspSeq2 ../Benchmarks/d198.tsp/d198.tsp ../Solutions/Sequential/d198two.sol
+//./TspSeq ../../Benchmarks/a280.tsp/a280.tsp a280
+
 
 #include "scanner.h"
 #include "functions.h"

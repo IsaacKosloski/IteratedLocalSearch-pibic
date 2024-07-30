@@ -1,4 +1,5 @@
 #!/bin/bash
+./TspPar ../../Benchmarks/kroA100.tsp/kroA100.tsp kroA100
 ./TspPar ../../Benchmarks/d198.tsp/d198.tsp d198
 ./TspPar ../../Benchmarks/a280.tsp/a280.tsp a280
 ./TspPar ../../Benchmarks/lin318.tsp/lin318.tsp lin318
