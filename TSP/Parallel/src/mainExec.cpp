@@ -3,7 +3,7 @@
 //Using OpenMP for parallel computation*/
 #include "functions.h"
 
-#define MAX_ITERATION /*10*/ 1000/**/ /*10000*/
+#define MAX_ITERATION 1000
 #define MAX_EXEC 30
 
 /* First section: Global variables */
