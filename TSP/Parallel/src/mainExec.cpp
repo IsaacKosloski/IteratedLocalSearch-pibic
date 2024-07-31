@@ -14,9 +14,9 @@ int main(int argc,char **argv)
     //Running code for MAX_EXEC
 
         /*First subsection: variables and data structs declaration (and some default definition)*/
-        int iteration = 0, exec = 0;
+        int iteration = 0, exec = 16;
         double bestSolutionWeight = numeric_limits<double>::max();
-    for(exec = 0; exec < MAX_EXEC; exec++)
+    for(exec = 16; exec < MAX_EXEC; exec++)
     {
         Node *initialSolution, *bestSolution;
 
@@ -69,7 +69,7 @@ int main(int argc,char **argv)
                     memcpy(bestSolution, threadsSolution, tsp->dimensionOfNodes * sizeof(Node));
                 }
             }
-            //memcpy(bestSolution, threadsSolution, tsp->dimensionOfNodes * sizeof(Node));
+            memcpy(bestSolution, threadsSolution, tsp->dimensionOfNodes * sizeof(Node));
 
             delete[] perturbedSolution;
             delete[] threadsSolution;
