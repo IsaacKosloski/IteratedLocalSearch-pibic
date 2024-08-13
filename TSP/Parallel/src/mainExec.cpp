@@ -97,8 +97,6 @@ int main(int argc,char **argv)
         double bestSolutionCost = solutionCost(bestSolution, tsp->nodesDistance, tsp->dimensionOfNodes);
         printResult(bestSolution, outputFileC, elapsed, bestSolutionCost, tsp->dimensionOfNodes, MAX_ITERATION);
 
-
-
         //Memory deallocation
         delete[] initialSolution;
         delete[] bestSolution;
